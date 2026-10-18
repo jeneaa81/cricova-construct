@@ -43,6 +43,7 @@ export const CartModal: React.FC<CartModalProps> = ({
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
+  const [notes, setNotes] = useState('');
   const [orderSent, setOrderSent] = useState(false);
   const [isSending, setIsSending] = useState(false);
 
