@@ -43,8 +43,8 @@ export const CartModal: React.FC<CartModalProps> = ({
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
-  const [notes, setNotes] = useState('');
   const [orderSent, setOrderSent] = useState(false);
+  const [isSending, setIsSending] = useState(false);
 
   if (!isOpen) return null;
 
@@ -89,42 +89,69 @@ export const CartModal: React.FC<CartModalProps> = ({
     createdAt: new Date().toISOString(),
   });
 
-  const handleSendTelegram = () => {
+  const handleSendTelegram = async () => {
+    setIsSending(true);
     const order = getOrderData();
 
-    // Format readable message for Telegram
+    // Format readable message for Telegram in HTML
     const itemsList = items
       .map(
         (it) =>
-          `• ${it.product.code1C} ${lang === 'ro' ? it.product.name_ro : it.product.name_ru} — ${it.quantity} x ${it.product.price} = ${it.quantity * it.product.price} MDL`
+          `• <b>${it.product.code1C}</b> ${lang === 'ro' ? it.product.name_ro : it.product.name_ru}\n   └ ${it.quantity} x ${it.product.price} = <b>${it.quantity * it.product.price} MDL</b>`
       )
       .join('\n');
 
-    const msg = `🧱 *NOUĂ COMANDĂ — MATERIALE CRICOVA*\n\n` +
-      `👤 *Client:* ${order.customerName}\n` +
-      `📞 *Telefon:* ${order.phone}\n` +
-      `🚚 *Tip:* ${order.deliveryType === 'pickup' ? 'Ridicare magazin' : `Livrare: ${order.address}`}\n` +
-      `⚖️ *Greutate:* ~${totalWeight.toFixed(1)} kg\n` +
-      `💳 *Plată:* ${order.paymentMethod === 'mia_instant' ? 'MIA Plăți Instant' : 'Numerar'}\n\n` +
-      `📋 *Produse:*\n${itemsList}\n\n` +
-      `💰 *Total:* ${order.total} MDL`;
+    const htmlMsg =
+      `🧱 <b>NOUĂ COMANDĂ — MATERIALE CRICOVA</b>\n` +
+      `━━━━━━━━━━━━━━━━━━━\n` +
+      `👤 <b>Client:</b> ${order.customerName}\n` +
+      `📞 <b>Telefon:</b> ${order.phone}\n` +
+      `🚚 <b>Metodă:</b> ${order.deliveryType === 'pickup' ? 'Ridicare din magazin (Cricova)' : `Livrare: ${order.address}`}\n` +
+      `⚖️ <b>Greutate estimativă:</b> ~${totalWeight.toFixed(1)} kg\n` +
+      `💳 <b>Modalitate plată:</b> ${order.paymentMethod === 'mia_instant' ? 'MIA Plăți Instant (QR)' : 'Numerar la primire'}\n` +
+      (notes ? `📝 <b>Notă client:</b> ${notes}\n` : '') +
+      `\n📋 <b>Produse comandate:</b>\n${itemsList}\n` +
+      `━━━━━━━━━━━━━━━━━━━\n` +
+      `📦 <b>Subtotal:</b> ${order.subtotal} MDL\n` +
+      `🚚 <b>Livrare:</b> ${order.deliveryCost === 0 ? 'Gratuit' : `${order.deliveryCost} MDL`}\n` +
+      `💰 <b>TOTAL SPRE PLATĂ: ${order.total} MDL</b>\n` +
+      `🕒 <i>${new Date().toLocaleString('ro-RO')}</i>`;
 
-    // If Telegram WebApp is available:
-    const tg = (window as unknown as { Telegram?: { WebApp?: { sendData: (s: string) => void } } }).Telegram?.WebApp;
-    if (tg && typeof tg.sendData === 'function') {
-      tg.sendData(JSON.stringify(order));
-    } else {
-      // Fallback: Open Telegram share / contact link
-      const encodedMsg = encodeURIComponent(msg);
-      window.open(`https://t.me/share/url?url=${encodedMsg}`, '_blank');
+    const BOT_TOKEN = '8965227576:AAGpnJG4vbX0cDBx2IGZ0vixuJ3zsJq5tm0';
+    const CHAT_ID = '410572268';
+
+    try {
+      await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: CHAT_ID,
+          text: htmlMsg,
+          parse_mode: 'HTML',
+        }),
+      });
+    } catch (e) {
+      console.error('Error sending telegram message:', e);
     }
 
+    // Trigger Telegram Mini App Haptic feedback if opened in Telegram
+    try {
+      const tg = (window as unknown as { Telegram?: { WebApp?: { HapticFeedback?: { notificationOccurred: (s: string) => void }; close?: () => void } } }).Telegram?.WebApp;
+      if (tg?.HapticFeedback) {
+        tg.HapticFeedback.notificationOccurred('success');
+      }
+    } catch {
+      // ignore
+    }
+
+    setIsSending(false);
     setOrderSent(true);
+
     setTimeout(() => {
       setOrderSent(false);
       onClearCart();
       onClose();
-    }, 2500);
+    }, 2800);
   };
 
   return (
@@ -423,10 +450,12 @@ export const CartModal: React.FC<CartModalProps> = ({
               {/* Telegram Order Action */}
               <button
                 onClick={handleSendTelegram}
-                disabled={orderSent}
+                disabled={orderSent || isSending}
                 className={`w-full py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-2 cursor-pointer shadow-md ${
                   orderSent
                     ? 'bg-emerald-600 text-white'
+                    : isSending
+                    ? 'bg-amber-400 text-slate-900 opacity-90'
                     : 'bg-amber-500 hover:bg-amber-600 text-slate-950'
                 }`}
               >
@@ -434,6 +463,11 @@ export const CartModal: React.FC<CartModalProps> = ({
                   <>
                     <CheckCircle2 className="w-4 h-4 text-white" />
                     <span>{t.orderSuccessTitle}</span>
+                  </>
+                ) : isSending ? (
+                  <>
+                    <span className="w-4 h-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin"></span>
+                    <span>{lang === 'ro' ? 'Se transmite...' : 'Отправка...'}</span>
                   </>
                 ) : (
                   <>
