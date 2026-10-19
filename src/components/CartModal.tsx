@@ -204,56 +204,68 @@ export const CartModal: React.FC<CartModalProps> = ({
                   return (
                     <div
                       key={item.product.id}
-                      className="flex items-center justify-between p-3 rounded-2xl bg-slate-50 border border-slate-200/80 gap-3"
+                      className="p-3 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-2.5"
                     >
-                      <div className="flex items-center gap-3 min-w-0">
+                      {/* Top row: Thumbnail + Title/1C/Unit price + Remove */}
+                      <div className="flex items-start gap-3">
                         <img
                           src={item.product.image}
                           alt={title}
-                          className="w-12 h-12 rounded-xl object-cover bg-white shrink-0 border border-slate-200"
+                          className="w-12 h-12 rounded-xl object-cover bg-white shrink-0 border border-slate-200 mt-0.5"
                         />
-                        <div className="min-w-0">
-                          <h4 className="font-bold text-xs sm:text-sm text-slate-900 truncate">
+                        <div className="flex-1 min-w-0 pr-1">
+                          <h4 className="font-bold text-xs sm:text-sm text-slate-900 leading-snug line-clamp-2">
                             {title}
                           </h4>
-                          <div className="flex items-center gap-2 mt-0.5 text-[11px] text-slate-500">
+                          <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 mt-1 text-[11px] text-slate-500">
                             <span className="font-mono text-amber-700 font-semibold">{item.product.code1C}</span>
                             <span>•</span>
                             <span>{item.product.price} {t.priceCurrency} / {unit}</span>
                           </div>
                         </div>
+
+                        <button
+                          onClick={() => onRemoveItem(item.product.id)}
+                          className="text-slate-400 hover:text-red-500 transition cursor-pointer p-1 -mr-1 -mt-1 shrink-0"
+                          title="Șterge"
+                          aria-label="Remove item"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
                       </div>
 
-                      {/* Quantity Controls */}
-                      <div className="flex items-center gap-3 shrink-0">
+                      {/* Bottom row: Stepper + Total price */}
+                      <div className="flex items-center justify-between pt-2 border-t border-slate-200/60">
+                        {/* Quantity Controls */}
                         <div className="flex items-center bg-white border border-slate-300 rounded-xl overflow-hidden shadow-2xs">
                           <button
                             onClick={() => onUpdateQuantity(item.product.id, item.quantity - 1)}
-                            className="p-1.5 hover:bg-slate-100 text-slate-600 cursor-pointer"
+                            className="p-1.5 hover:bg-slate-100 text-slate-600 cursor-pointer active:bg-slate-200"
+                            aria-label="Decrease quantity"
                           >
                             <Minus className="w-3.5 h-3.5" />
                           </button>
-                          <span className="w-7 text-center font-bold text-xs text-slate-900">
+                          <span className="w-8 text-center font-bold text-xs text-slate-900">
                             {item.quantity}
                           </span>
                           <button
                             onClick={() => onUpdateQuantity(item.product.id, item.quantity + 1)}
-                            className="p-1.5 hover:bg-slate-100 text-slate-600 cursor-pointer"
+                            className="p-1.5 hover:bg-slate-100 text-slate-600 cursor-pointer active:bg-slate-200"
+                            aria-label="Increase quantity"
                           >
                             <Plus className="w-3.5 h-3.5" />
                           </button>
                         </div>
 
-                        <div className="w-16 text-right font-extrabold text-sm text-slate-900">
-                          {item.product.price * item.quantity} {t.priceCurrency}
+                        {/* Item Subtotal */}
+                        <div className="text-right">
+                          <span className="text-[10px] text-slate-400 uppercase tracking-wider block font-medium">
+                            {lang === 'ro' ? 'Total' : 'Сумма'}
+                          </span>
+                          <span className="font-extrabold text-sm sm:text-base text-slate-900">
+                            {(item.product.price * item.quantity).toLocaleString()} {t.priceCurrency}
+                          </span>
                         </div>
-
-                        <button
-                          onClick={() => onRemoveItem(item.product.id)}
-                          className="text-slate-400 hover:text-red-500 transition cursor-pointer p-1"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
                       </div>
                     </div>
                   );
