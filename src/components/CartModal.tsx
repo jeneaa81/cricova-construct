@@ -103,7 +103,8 @@ export const CartModal: React.FC<CartModalProps> = ({
       .join('\n');
 
     const htmlMsg =
-      `🧱 <b>NOUĂ COMANDĂ — MATERIALE CRICOVA</b>\n` +
+      `🧱 <b>NOUĂ COMANDĂ — „LA PLOPI” (CRICOVA)</b>\n` +
+      `🏢 <i>S.R.L. OLVALCONS GRUP</i>\n` +
       `━━━━━━━━━━━━━━━━━━━\n` +
       `👤 <b>Client:</b> ${order.customerName}\n` +
       `📞 <b>Telefon:</b> ${order.phone}\n` +

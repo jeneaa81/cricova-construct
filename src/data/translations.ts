@@ -1,8 +1,9 @@
 export const TRANSLATIONS = {
   ro: {
-    storeName: 'Materiale de Construcție',
-    storeSubtitle: 'Cricova • Magazinul tău local pentru construcții și reparații',
-    locationBadge: 'or. Cricova (lângă tine)',
+    storeName: 'Materiale de Construcție „La Plopi”',
+    storeSubtitle: 'Cricova, str. Dumitru Călin • OLVALCONS GRUP S.R.L.',
+    locationBadge: 'or. Cricova, str. Dumitru Călin („La Plopi”)',
+    legalNotice: 'S.R.L. „OLVALCONS GRUP” • IDNO: 1009600018315 • or. Cricova',
     searchPlaceholder: 'Caută ciment, adeziv, gips-carton, vopsea...',
     allCategories: 'Toate produsele',
     calculatorBtn: 'Calculator Materiale',
@@ -51,9 +52,10 @@ export const TRANSLATIONS = {
     phoneCall: 'Sună magazinul',
   },
   ru: {
-    storeName: 'Материалы для Строительства',
-    storeSubtitle: 'Крикова • Ваш местный магазин для стройки и ремонта',
-    locationBadge: 'г. Крикова (рядом с вами)',
+    storeName: 'Стройматериалы „La Plopi”',
+    storeSubtitle: 'г. Крикова, ул. Думитру Кэлин • OLVALCONS GRUP S.R.L.',
+    locationBadge: 'г. Крикова, ул. Думитру Кэлин («La Plopi»)',
+    legalNotice: 'S.R.L. „OLVALCONS GRUP” • IDNO: 1009600018315 • г. Крикова',
     searchPlaceholder: 'Искать цемент, клей, гипсокартон, краску...',
     allCategories: 'Все товары',
     calculatorBtn: 'Калькулятор материалов',

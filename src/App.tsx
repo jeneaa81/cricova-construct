@@ -130,13 +130,13 @@ export const App: React.FC = () => {
           <div className="relative z-10 max-w-2xl space-y-3">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-semibold backdrop-blur-xs border border-amber-500/30">
               <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-              <span>{lang === 'ro' ? 'Depozit în or. Cricova' : 'Склад в г. Крикова'}</span>
+              <span>{lang === 'ro' ? 'Depozit „La Plopi” • or. Cricova' : 'Склад «La Plopi» • г. Крикова'}</span>
             </div>
 
             <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight leading-tight">
               {lang === 'ro'
-                ? 'Toate materialele de construcție direct în Cricova'
-                : 'Все стройматериалы прямо в Крикова без очередей'}
+                ? 'Materiale de construcție „La Plopi” în Cricova'
+                : 'Стройматериалы «La Plopi» прямо в Крикова'}
             </h2>
 
             <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-xl">
@@ -222,6 +222,16 @@ export const App: React.FC = () => {
           })}
         </div>
       </main>
+
+      {/* Footer with Legal Information */}
+      <footer className="max-w-6xl mx-auto px-4 w-full mt-6 border-t border-slate-200 py-6 text-center text-xs text-slate-500 space-y-1">
+        <p className="font-bold text-slate-700">
+          {lang === 'ro' ? 'Depozit & Magazin „La Plopi”' : 'Склад-магазин «La Plopi»'} • or. Cricova, str. Dumitru Călin
+        </p>
+        <p className="font-mono text-[11px] text-slate-400">
+          S.R.L. „OLVALCONS GRUP” • IDNO: 1009600018315
+        </p>
+      </footer>
 
       {/* Floating Bottom Bar for Mobile when cart has items */}
       {cartTotalItems > 0 && (
