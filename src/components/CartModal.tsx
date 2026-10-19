@@ -120,7 +120,7 @@ export const CartModal: React.FC<CartModalProps> = ({
       `🕒 <i>${new Date().toLocaleString('ro-RO')}</i>`;
 
     const BOT_TOKEN = '8836972451:AAGKEl9-tMifEykqhBb-92IrJHSsrx1Lq4g';
-    const CHAT_ID = '410572268';
+    const CHAT_ID = '-5286778153';
 
     try {
       await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
