@@ -119,7 +119,7 @@ export const CartModal: React.FC<CartModalProps> = ({
       `💰 <b>TOTAL SPRE PLATĂ: ${order.total} MDL</b>\n` +
       `🕒 <i>${new Date().toLocaleString('ro-RO')}</i>`;
 
-    const BOT_TOKEN = '8965227576:AAGpnJG4vbX0cDBx2IGZ0vixuJ3zsJq5tm0';
+    const BOT_TOKEN = '8836972451:AAGKEl9-tMifEykqhBb-92IrJHSsrx1Lq4g';
     const CHAT_ID = '410572268';
 
     try {
